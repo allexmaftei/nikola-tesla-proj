@@ -1,0 +1,523 @@
+/* Enhanced styles for interactive features */
+
+.hero-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.secondary-button {
+  padding: 10px 20px;
+  background: transparent;
+  border: 1px solid #d0d4ce;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #2a2d27;
+}
+
+.secondary-button:hover {
+  background: #f0f2ef;
+  border-color: #b4beb7;
+}
+
+.secondary-button span {
+  margin-right: 6px;
+}
+
+/* Alert styles */
+.alerts-grid {
+  display: grid;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.alerts-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.alert-item {
+  padding: 16px;
+  background: #fff;
+  border: 1px solid #edf1ed;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.alert-item:hover {
+  border-color: #d0d4ce;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.alert-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.alert-header strong {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.alert-header small {
+  color: #8a8d87;
+  font-size: 12px;
+}
+
+.alert-header .delete-alert {
+  margin-left: auto;
+  padding: 4px 8px;
+  background: transparent;
+  border: none;
+  color: #8a8d87;
+  cursor: pointer;
+  font-size: 18px;
+  transition: color 0.2s ease;
+}
+
+.alert-header .delete-alert:hover {
+  color: #d32f2f;
+}
+
+.alert-info {
+  font-size: 12px;
+  color: #8a8d87;
+  padding: 0 28px;
+}
+
+/* Alert form */
+.alert-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 12px;
+  font-weight: 500;
+  color: #2a2d27;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.form-group input,
+.form-group select {
+  padding: 10px 12px;
+  border: 1px solid #d0d4ce;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: #5d84df;
+  box-shadow: 0 0 0 3px rgba(93, 132, 223, 0.1);
+}
+
+.form-summary {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #f6f8f3;
+  border-radius: 6px;
+  font-size: 14px;
+  color: #2a2d27;
+}
+
+.form-summary strong {
+  font-weight: 600;
+  color: #000;
+  font-size: 16px;
+}
+
+.trade-feedback {
+  padding: 10px 12px;
+  background: #e8f5e9;
+  border-left: 3px solid #4caf50;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #2e7d32;
+  min-height: 20px;
+}
+
+/* Modal actions */
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  justify-content: flex-end;
+}
+
+.modal-actions button {
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Notification badge */
+#notifBadge {
+  display: none;
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 18px;
+  height: 18px;
+  background: #d32f2f;
+  color: white;
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-button {
+  position: relative;
+}
+
+/* Enhanced metrics grid */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.metric-card {
+  padding: 16px;
+  background: #fff;
+  border: 1px solid #edf1ed;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.metric-card:hover {
+  border-color: #d0d4ce;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.metric-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #8a8d87;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.metric-value {
+  font-size: 24px;
+  font-weight: 600;
+  color: #2a2d27;
+}
+
+.metric-value.positive {
+  color: #2e7d32;
+}
+
+.metric-value.negative {
+  color: #d32f2f;
+}
+
+.metric-cents {
+  font-size: 14px;
+  font-weight: 500;
+  color: #8a8d87;
+}
+
+.metric-change {
+  font-size: 12px;
+  color: #8a8d87;
+  margin-top: 8px;
+}
+
+.metric-chart {
+  font-size: 20px;
+  margin-top: 8px;
+}
+
+/* Close position button */
+.close-position {
+  padding: 4px 8px;
+  background: transparent;
+  border: 1px solid #d0d4ce;
+  border-radius: 4px;
+  color: #8a8d87;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.close-position:hover {
+  background: #fff3cd;
+  border-color: #ffa500;
+  color: #ff6b00;
+}
+
+/* Activity item styling */
+.activity-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #edf1ed;
+  font-size: 13px;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-icon {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.activity-icon.buy {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.activity-icon.sell {
+  background: #ffebee;
+  color: #d32f2f;
+}
+
+.activity-icon.alert {
+  background: #fff3cd;
+  color: #ff6b00;
+}
+
+.activity-item strong {
+  font-weight: 600;
+  color: #2a2d27;
+}
+
+.activity-item small {
+  color: #8a8d87;
+  font-size: 11px;
+}
+
+.activity-time {
+  margin-left: auto;
+  color: #8a8d87;
+  font-size: 11px;
+}
+
+/* Table enhancements */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+thead {
+  background: #f6f8f3;
+  border-bottom: 2px solid #edf1ed;
+}
+
+th {
+  padding: 12px 8px;
+  text-align: left;
+  font-weight: 600;
+  color: #8a8d87;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+td {
+  padding: 12px 8px;
+  border-bottom: 1px solid #edf1ed;
+  color: #2a2d27;
+}
+
+tbody tr:hover {
+  background: #f9faf8;
+}
+
+.stock-logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 4px;
+  color: white;
+  font-weight: 600;
+  font-size: 12px;
+  margin-right: 8px;
+  flex-shrink: 0;
+}
+
+.stock-logo.nvidia {
+  background: #ec844e;
+}
+
+.stock-logo.apple {
+  background: #555;
+}
+
+.stock-logo.tesla {
+  background: #e82127;
+}
+
+.stock-logo.microsoft {
+  background: #0078d4;
+}
+
+.asset-name {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.asset-name strong {
+  font-weight: 600;
+  color: #2a2d27;
+}
+
+.asset-name small {
+  color: #8a8d87;
+  font-size: 11px;
+}
+
+/* Dark theme adjustments */
+body.dark-theme .alert-item {
+  background: #1e1f1d;
+  border-color: #333331;
+}
+
+body.dark-theme .alert-item:hover {
+  border-color: #444443;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+body.dark-theme .secondary-button {
+  background: transparent;
+  border-color: #444443;
+  color: #e0e0e0;
+}
+
+body.dark-theme .secondary-button:hover {
+  background: #2a2a28;
+  border-color: #555554;
+}
+
+body.dark-theme .form-group input,
+body.dark-theme .form-group select {
+  background: #2a2a28;
+  border-color: #444443;
+  color: #e0e0e0;
+}
+
+body.dark-theme .form-group input:focus,
+body.dark-theme .form-group select:focus {
+  border-color: #5d84df;
+  box-shadow: 0 0 0 3px rgba(93, 132, 223, 0.2);
+}
+
+body.dark-theme .form-summary {
+  background: #2a2a28;
+  color: #e0e0e0;
+}
+
+body.dark-theme .form-summary strong {
+  color: #fff;
+}
+
+body.dark-theme .trade-feedback {
+  background: #1b5e20;
+  color: #c8e6c9;
+}
+
+body.dark-theme tbody tr:hover {
+  background: #2a2a28;
+}
+
+body.dark-theme .activity-item {
+  border-bottom-color: #333331;
+}
+
+body.dark-theme .activity-icon.buy {
+  background: #1b5e20;
+  color: #81c784;
+}
+
+body.dark-theme .activity-icon.sell {
+  background: #b71c1c;
+  color: #ef9a9a;
+}
+
+body.dark-theme .activity-icon.alert {
+  background: #f57f17;
+  color: #fff9c4;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .metrics-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .modal-actions {
+    flex-direction: column-reverse;
+  }
+
+  .modal-actions button {
+    width: 100%;
+  }
+
+  .alert-header {
+    flex-wrap: wrap;
+  }
+
+  .alert-header .delete-alert {
+    margin-left: auto;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 8px 4px;
+  }
+
+  .stock-logo {
+    width: 24px;
+    height: 24px;
+    font-size: 10px;
+  }
+}
