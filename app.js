@@ -1,19 +1,27 @@
 const chart = document.querySelector('#marketChart');
 const chartContext = chart.getContext('2d');
 const tradeModal = document.querySelector('#tradeModal');
+const alertModal = document.querySelector('#alertModal');
 const tradeSymbol = document.querySelector('#tradeSymbol');
 const tradeShares = document.querySelector('#tradeShares');
 const estimatedValue = document.querySelector('#estimatedValue');
 const tradeFeedback = document.querySelector('#tradeFeedback');
 const positionsBody = document.querySelector('#positionsBody');
+const alertSymbol = document.querySelector('#alertSymbol');
+const alertPrice = document.querySelector('#alertPrice');
+const alertType = document.querySelector('#alertType');
+const alertNotify = document.querySelector('#alertNotify');
 
 const prices = { NVDA: 184.92, TSLA: 248.09, AAPL: 247.12, MSFT: 514.33, AMD: 154.72 };
+const priceAlerts = new Map();
 let selectedSide = 'buy';
 let selectedRange = '1W';
 let chartSeries = buildSeries(42);
 const overviewView = document.querySelector('#overview');
 const modelsView = document.querySelector('#models-page');
+const alertsView = document.querySelector('#alerts');
 const themeButtons = document.querySelectorAll('.theme-toggle');
+let notificationCount = 0;
 
 function applyTheme(theme) {
   const dark = theme === 'dark';
@@ -119,6 +127,15 @@ function closeTradeModal() {
   tradeModal.hidden = true;
 }
 
+function openAlertModal() {
+  alertModal.hidden = false;
+  alertSymbol.focus();
+}
+
+function closeAlertModal() {
+  alertModal.hidden = true;
+}
+
 function refreshEstimate() {
   const symbol = tradeSymbol.value.trim().toUpperCase();
   const shares = Math.max(0, Number(tradeShares.value) || 0);
@@ -130,8 +147,26 @@ function addTradeToFeed(symbol, shares, side) {
   const row = document.createElement('tr');
   const logoClass = symbol === 'TSLA' ? 'tesla' : symbol === 'AAPL' ? 'apple' : symbol === 'MSFT' ? 'microsoft' : 'nvidia';
   const price = prices[symbol] || prices.NVDA;
-  row.innerHTML = `<td><span class="stock-logo ${logoClass}">${symbol[0]}</span><span class="asset-name"><strong>${symbol}</strong><small>${side === 'buy' ? 'Paper position' : 'Paper exit'}</small></span></td><td class="mono">$${price.toFixed(2)}</td><td class="mono">${shares}</td><td class="mono">$${price.toFixed(2)}</td><td class="mono">$${(price * shares).toFixed(2)}</td><td class="${side === 'buy' ? 'positive' : ''} mono">${side === 'buy' ? '+' : '-'}$0.00 <small>0.00%</small></td><td><button class="row-menu">•••</button></td>`;
+  const direction = side === 'buy' ? '↗' : '↙';
+  const type = side === 'buy' ? 'Paper position' : 'Paper exit';
+  const returnValue = (Math.random() - 0.5) * 500;
+  const returnClass = returnValue >= 0 ? 'positive' : 'negative';
+  row.innerHTML = `<td><span class="stock-logo ${logoClass}">${symbol[0]}</span><span class="asset-name"><strong>${symbol}</strong><small>${type}</small></span></td><td>$${price.toFixed(2)}</td><td>${shares}</td><td>$${(price * 0.95).toFixed(2)}</td><td>$${(price * shares).toFixed(2)}</td><td class="${returnClass}">$${returnValue.toFixed(2)}</td><td><button class="text-button close-position" data-symbol="${symbol}">✕</button></td>`;
   positionsBody.prepend(row);
+  updateCloseButtons();
+}
+
+function updateCloseButtons() {
+  document.querySelectorAll('.close-position').forEach((btn) => {
+    btn.removeEventListener('click', handleClosePosition);
+    btn.addEventListener('click', handleClosePosition);
+  });
+}
+
+function handleClosePosition(e) {
+  const symbol = e.target.dataset.symbol;
+  e.target.closest('tr').remove();
+  showNotification(`${symbol} position closed`);
 }
 
 function runGradientDescent() {
@@ -166,10 +201,16 @@ function runGradientDescent() {
 
 function showView(viewName) {
   const showModels = viewName === 'models-page';
-  overviewView.hidden = showModels;
+  const showAlerts = viewName === 'alerts';
+  overviewView.hidden = showModels || showAlerts;
   modelsView.hidden = !showModels;
-  document.querySelectorAll('.nav-item').forEach((item) => item.classList.toggle('active', item.getAttribute('href') === `#${showModels ? 'models-page' : 'overview'}`));
-  if (showModels) window.scrollTo({ top: 0, behavior: 'smooth' });
+  alertsView.hidden = !showAlerts;
+  document.querySelectorAll('.nav-item').forEach((item) => {
+    const href = item.getAttribute('href');
+    const isActive = (showModels && href === '#models-page') || (showAlerts && href === '#alerts') || (!showModels && !showAlerts && href === '#overview');
+    item.classList.toggle('active', isActive);
+  });
+  if (showModels || showAlerts) window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function updateLabPrediction() {
@@ -202,15 +243,111 @@ function showLesson(lesson) {
   const copy = {
     market: 'Compare a stock with its benchmark. A rising price with rising volume can confirm momentum, while a rising price on weak volume deserves a closer look.',
     risk: 'Use a validation set and compare your forecast with a simple baseline. A complex model is only useful when it generalizes to data it has never seen.',
-    hypothesis: 'Write: “If momentum stays above 60 and volatility stays below 40, then NVDA will outperform SPY over the next 7 trading days.” Then paper trade and review the result.'
+    hypothesis: 'Write: "If momentum stays above 60 and volatility stays below 40, then NVDA will outperform SPY over the next 7 trading days." Then paper trade and review the result.'
   };
   document.querySelector('#lessonText').textContent = copy[lesson];
   document.querySelector('#lessonBanner').hidden = false;
 }
 
+function createPriceAlert() {
+  const symbol = alertSymbol.value.trim().toUpperCase() || 'NVDA';
+  const price = Number(alertPrice.value) || 190;
+  const type = alertType.value;
+  const notify = alertNotify.value;
+  
+  if (!priceAlerts.has(symbol)) {
+    priceAlerts.set(symbol, []);
+  }
+  
+  priceAlerts.get(symbol).push({ price, type, notify });
+  
+  renderAlerts();
+  closeAlertModal();
+  showNotification(`Alert created for ${symbol} at $${price.toFixed(2)}`);
+  
+  // Reset form
+  alertSymbol.value = '';
+  alertPrice.value = '';
+  alertType.value = 'above';
+  alertNotify.value = 'email';
+}
+
+function renderAlerts() {
+  const alertsPanel = document.querySelector('.alerts-panel');
+  if (!alertsPanel) return;
+  
+  alertsPanel.innerHTML = '';
+  
+  priceAlerts.forEach((alerts, symbol) => {
+    alerts.forEach((alert, idx) => {
+      const price = prices[symbol] || 100;
+      const alertDiv = document.createElement('div');
+      alertDiv.className = 'alert-item';
+      alertDiv.dataset.symbol = symbol;
+      const direction = alert.type === 'above' ? 'or above' : 'or below';
+      alertDiv.innerHTML = `
+        <div class="alert-header">
+          <span class="stock-logo ${symbol.toLowerCase()}">${symbol[0]}</span>
+          <div><strong>${symbol}</strong> <small>$${alert.price.toFixed(2)} ${direction}</small></div>
+          <button class="text-button delete-alert" data-symbol="${symbol}" data-index="${idx}">×</button>
+        </div>
+        <div class="alert-info">Current: $${price.toFixed(2)} · Notify via ${alert.notify === 'both' ? 'Email & Popup' : alert.notify.charAt(0).toUpperCase() + alert.notify.slice(1)}</div>
+      `;
+      alertsPanel.appendChild(alertDiv);
+    });
+  });
+  
+  // Add delete handlers
+  document.querySelectorAll('.delete-alert').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+      const symbol = e.currentTarget.dataset.symbol;
+      const index = Number(e.currentTarget.dataset.index);
+      const alerts = priceAlerts.get(symbol);
+      if (alerts) {
+        alerts.splice(index, 1);
+        if (alerts.length === 0) priceAlerts.delete(symbol);
+        renderAlerts();
+        showNotification(`Alert deleted for ${symbol}`);
+      }
+    });
+  });
+}
+
+function showNotification(message) {
+  notificationCount++;
+  const badge = document.querySelector('#notifBadge');
+  if (badge) {
+    badge.textContent = notificationCount;
+    badge.style.display = 'block';
+  }
+  
+  // In a real app, show a toast notification
+  console.log('Notification:', message);
+}
+
+function checkPriceAlerts() {
+  priceAlerts.forEach((alerts, symbol) => {
+    const currentPrice = prices[symbol];
+    alerts.forEach((alert) => {
+      const triggered = (alert.type === 'above' && currentPrice >= alert.price) ||
+                       (alert.type === 'below' && currentPrice <= alert.price);
+      if (triggered) {
+        showNotification(`${symbol} alert: $${currentPrice.toFixed(2)} ${alert.type === 'above' ? '≥' : '≤'} $${alert.price.toFixed(2)}`);
+      }
+    });
+  });
+}
+
+// Event listeners
 document.querySelector('#tradeButton').addEventListener('click', openTradeModal);
+document.querySelector('#alertButton').addEventListener('click', openAlertModal);
+document.querySelector('#addAlertButton')?.addEventListener('click', openAlertModal);
 document.querySelector('#closeModal').addEventListener('click', closeTradeModal);
+document.querySelector('#closeModal2').addEventListener('click', closeTradeModal);
+document.querySelector('#closeAlertModal').addEventListener('click', closeAlertModal);
+document.querySelector('#cancelAlertModal').addEventListener('click', closeAlertModal);
 tradeModal.addEventListener('click', (event) => { if (event.target === tradeModal) closeTradeModal(); });
+alertModal.addEventListener('click', (event) => { if (event.target === alertModal) closeAlertModal(); });
 tradeSymbol.addEventListener('input', refreshEstimate);
 tradeShares.addEventListener('input', refreshEstimate);
 document.querySelectorAll('.trade-tab').forEach((tab) => tab.addEventListener('click', () => {
@@ -225,12 +362,16 @@ document.querySelector('#submitTrade').addEventListener('click', () => {
   tradeFeedback.textContent = `${selectedSide === 'buy' ? 'Buy' : 'Sell'} order queued in paper account.`;
   setTimeout(closeTradeModal, 1000);
 });
+document.querySelector('#submitAlert').addEventListener('click', createPriceAlert);
 document.querySelector('#trainButton').addEventListener('click', runGradientDescent);
 document.querySelectorAll('.time-tab').forEach((tab) => tab.addEventListener('click', () => updateChartRange(tab.dataset.range)));
 document.querySelectorAll('.feature-controls input').forEach((input) => input.addEventListener('input', updateLabPrediction));
 document.querySelector('#labTrainButton').addEventListener('click', trainLabModel);
 document.querySelectorAll('.lesson-button').forEach((button) => button.addEventListener('click', () => showLesson(button.dataset.lesson)));
 document.querySelector('#closeLesson').addEventListener('click', () => { document.querySelector('#lessonBanner').hidden = true; });
+document.querySelector('#notificationBell').addEventListener('click', () => {
+  showView('alerts');
+});
 themeButtons.forEach((button) => button.addEventListener('click', () => {
   const nextTheme = document.body.classList.contains('dark-theme') ? 'light' : 'dark';
   localStorage.setItem('atlas-theme', nextTheme);
@@ -247,11 +388,18 @@ showView(window.location.hash.slice(1) || 'overview');
 resizeCanvas();
 setInterval(() => {
   prices.NVDA += (Math.random() - 0.49) * 0.14;
+  prices.AAPL += (Math.random() - 0.49) * 0.10;
+  prices.TSLA += (Math.random() - 0.49) * 0.12;
+  prices.MSFT += (Math.random() - 0.49) * 0.08;
   const currentPrice = document.querySelector('.forecast-price');
-  currentPrice.innerHTML = `$${prices.NVDA.toFixed(2)} <em>+3.21%</em>`;
+  if (currentPrice) currentPrice.innerHTML = `$${prices.NVDA.toFixed(2)} <em>+3.21%</em>`;
   chartSeries.nvda.push(chartSeries.nvda.at(-1) + (Math.random() - 0.42) * 0.35);
   chartSeries.aapl.push(chartSeries.aapl.at(-1) + (Math.random() - 0.47) * 0.2);
   chartSeries.spy.push(chartSeries.spy.at(-1) + (Math.random() - 0.49) * 0.13);
   chartSeries.nvda.shift(); chartSeries.aapl.shift(); chartSeries.spy.shift();
   drawChart();
+  checkPriceAlerts();
 }, 3500);
+
+// Initialize alerts
+renderAlerts();
