@@ -24,6 +24,7 @@
           <a class="nav-item active" href="#overview"><span class="nav-icon">⌁</span>Overview</a>
           <a class="nav-item" href="#markets"><span class="nav-icon">◌</span>Markets</a>
           <a class="nav-item" href="#portfolio"><span class="nav-icon">▧</span>Portfolio</a>
+          <a class="nav-item" href="#alerts"><span class="nav-icon">⚠</span>Alerts</a>
           <a class="nav-item" href="#models-page"><span class="nav-icon">⌬</span>Models <span class="nav-count">2</span></a>
         </nav>
         <div class="nav-divider"></div>
@@ -44,7 +45,7 @@
           <div class="breadcrumb"><span>Workspace</span><b>/</b><strong>Overview</strong></div>
           <div class="topbar-actions">
             <div class="market-status"><span class="live-pulse"></span>US markets open <span class="status-time">09:42:18 ET</span></div>
-            <button class="icon-button" aria-label="Notifications">♢<i></i></button>
+            <button class="icon-button" aria-label="Notifications" id="notificationBell">♢<i id="notifBadge"></i></button>
             <button class="help-button">? <span>Help center</span></button><button class="theme-toggle" aria-label="Switch to dark theme" title="Switch theme">☾</button>
           </div>
         </header>
@@ -55,27 +56,32 @@
             <h1>Good morning, Alex <span class="wave">✦</span></h1>
             <p class="hero-subtitle">A clear view of your ideas, positions, and signals.</p>
           </div>
-          <button class="primary-button" id="tradeButton"><span>＋</span> New paper trade</button>
+          <div class="hero-actions">
+            <button class="primary-button" id="tradeButton"><span>＋</span> New paper trade</button>
+            <button class="secondary-button" id="alertButton"><span>🔔</span> Set Alert</button>
+          </div>
         </section>
 
         <section class="metrics-grid" aria-label="Portfolio summary">
-          <article class="metric-card accent-card"><div class="metric-heading"><span>Total equity</span><span class="card-menu">•••</span></div><div class="metric-value">$124,850<span class="metric-cents">.40</span></div><div class="metric-foot positive"><span>↗ 2.84%</span> <span class="muted">+$3,454.20 today</span></div></article>
-          <article class="metric-card"><div class="metric-heading"><span>Buying power</span><span class="mini-badge">PAPER</span></div><div class="metric-value">$86,240<span class="metric-cents">.00</span></div><div class="metric-foot"><span class="muted">Available to deploy</span></div></article>
-          <article class="metric-card"><div class="metric-heading"><span>Day P&amp;L</span><span class="card-menu">•••</span></div><div class="metric-value positive">+$3,454<span class="metric-cents">.20</span></div><div class="metric-foot positive"><span>↗ 18.6%</span> <span class="muted">vs. last session</span></div></article>
-          <article class="metric-card"><div class="metric-heading"><span>Model confidence</span><span class="model-badge">v0.3</span></div><div class="metric-value">78<span class="metric-cents">.4%</span></div><div class="metric-foot confidence-foot"><span class="confidence-bar"><i></i></span> <span class="muted">Strong signal</span></div></article>
+          <article class="metric-card accent-card"><div class="metric-heading"><span>Total equity</span><span class="card-menu">•••</span></div><div class="metric-value">$124,850<span class="metric-cents">.00</span></div><div class="metric-chart">↗</div></article>
+          <article class="metric-card"><div class="metric-heading"><span>Buying power</span><span class="mini-badge">PAPER</span></div><div class="metric-value">$86,240<span class="metric-cents">.50</span></div><div class="metric-change">Available</div></article>
+          <article class="metric-card"><div class="metric-heading"><span>Day P&amp;L</span><span class="card-menu">•••</span></div><div class="metric-value positive">+$3,454<span class="metric-cents">.20</span></div><div class="metric-change">+2.84%</div></article>
+          <article class="metric-card"><div class="metric-heading"><span>Model confidence</span><span class="model-badge">v0.3</span></div><div class="metric-value">78<span class="metric-cents">.4%</span></div><div class="metric-change">Last 7d</div></article>
+          <article class="metric-card"><div class="metric-heading"><span>Win rate</span><span class="mini-badge">NEW</span></div><div class="metric-value positive">64<span class="metric-cents">.2%</span></div><div class="metric-change">This month</div></article>
+          <article class="metric-card"><div class="metric-heading"><span>Risk score</span></div><div class="metric-value">42<span class="metric-cents">/100</span></div><div class="metric-change">Moderate</div></article>
         </section>
 
         <section class="content-grid">
           <div class="panel chart-panel" id="markets">
-            <div class="panel-header"><div><div class="panel-kicker">MARKET PULSE <span class="live-pulse"></span></div><h2>Watchlist performance</h2></div><div class="chart-actions"><div class="time-tabs" role="group" aria-label="Chart timeframe"><button class="time-tab" data-range="1D">1D</button><button class="time-tab active" data-range="1W">1W</button><button class="time-tab" data-range="1M">1M</button><button class="time-tab" data-range="3M">3M</button><button class="time-tab" data-range="1Y">1Y</button></div><button class="expand-button" aria-label="Expand chart">⤢</button></div></div>
-            <div class="chart-legend"><span><i class="legend-dot orange"></i>NVDA <b id="nvdaLegend">+8.42%</b></span><span><i class="legend-dot blue-dot"></i>AAPL <b class="neutral">+2.18%</b></span><span><i class="legend-dot gray-dot"></i>SPY <b class="neutral">+1.64%</b></span></div>
-            <div class="chart-wrap"><div class="y-labels"><span>+12%</span><span>+8%</span><span>+4%</span><span>0%</span><span>-4%</span></div><canvas id="marketChart" aria-label="Watchlist performance line chart"></canvas><div class="x-labels"><span>Sep 10</span><span>Sep 11</span><span>Sep 12</span><span>Sep 13</span><span>Sep 14</span><span>Sep 15</span><span>Today</span></div></div>
+            <div class="panel-header"><div><div class="panel-kicker">MARKET PULSE <span class="live-pulse"></span></div><h2>Watchlist performance</h2></div><div class="chart-actions"><div class="time-tabs"><button class="time-tab active" data-range="1D">1D</button><button class="time-tab" data-range="1W">1W</button><button class="time-tab" data-range="1M">1M</button><button class="time-tab" data-range="3M">3M</button><button class="time-tab" data-range="1Y">1Y</button></div></div></div>
+            <div class="chart-legend"><span><i class="legend-dot orange"></i>NVDA <b id="nvdaLegend">+8.42%</b></span><span><i class="legend-dot blue-dot"></i>AAPL <b class="neutral">+2.18%</b></span><span><i class="legend-dot gray-dot"></i>SPY <b class="neutral">+1.14%</b></span></div>
+            <div class="chart-wrap"><div class="y-labels"><span>+12%</span><span>+8%</span><span>+4%</span><span>0%</span><span>-4%</span></div><canvas id="marketChart" aria-label="Watchlist performance chart"></canvas></div>
           </div>
 
           <div class="panel model-panel" id="models">
             <div class="panel-header"><div><div class="panel-kicker">ATLAS LABS <span class="model-badge">BETA</span></div><h2>Signal forecast</h2></div><button class="card-menu">•••</button></div>
             <div class="forecast-symbol"><span class="stock-logo nvidia">N</span><span><strong>NVDA</strong><small>NVIDIA Corporation</small></span><span class="forecast-price">$184.92 <em>+3.21%</em></span></div>
-            <div class="forecast-callout"><div class="callout-label">7-day predicted movement</div><div class="forecast-number">+6.8% <span>bullish</span></div><div class="forecast-range"><span>confidence interval</span><b>$190.10 — $201.40</b></div></div>
+            <div class="forecast-callout"><div class="callout-label">7-day predicted movement</div><div class="forecast-number">+6.8% <span>bullish</span></div><div class="forecast-range"><span>confidence 78%</span></div></div>
             <div class="model-meta"><div><span>Model</span><strong>Linear regression</strong></div><div><span>Training loss</span><strong id="lossValue">0.0184</strong></div><div><span>Last trained</span><strong id="trainedAt">2 min ago</strong></div></div>
             <button class="outline-button" id="trainButton"><span class="spark">✦</span> Retrain model <kbd>⌘ ↵</kbd></button>
             <p class="model-note"><span>i</span> Trained on 90 days of price, volume, and momentum data.</p>
@@ -85,50 +91,102 @@
         <section class="lower-grid">
           <div class="panel positions-panel" id="portfolio">
             <div class="panel-header"><div><div class="panel-kicker">YOUR ACCOUNT</div><h2>Open positions <span class="count-badge">4</span></h2></div><button class="text-button">View portfolio <span>→</span></button></div>
-            <div class="table-wrap"><table><thead><tr><th>ASSET</th><th>LAST PRICE</th><th>SHARES</th><th>AVG. COST</th><th>MARKET VALUE</th><th>DAY RETURN</th><th></th></tr></thead><tbody id="positionsBody"><tr><td><span class="stock-logo tesla">T</span><span class="asset-name"><strong>TSLA</strong><small>Tesla, Inc.</small></span></td><td class="mono">$248.09</td><td class="mono">120</td><td class="mono">$211.40</td><td class="mono">$29,770.80</td><td class="positive mono">+$1,834.80 <small>+6.56%</small></td><td><button class="row-menu">•••</button></td></tr><tr><td><span class="stock-logo apple">A</span><span class="asset-name"><strong>AAPL</strong><small>Apple Inc.</small></span></td><td class="mono">$247.12</td><td class="mono">80</td><td class="mono">$224.82</td><td class="mono">$19,769.60</td><td class="positive mono">+$684.20 <small>+3.58%</small></td><td><button class="row-menu">•••</button></td></tr><tr><td><span class="stock-logo microsoft">M</span><span class="asset-name"><strong>MSFT</strong><small>Microsoft Corp.</small></span></td><td class="mono">$514.33</td><td class="mono">24</td><td class="mono">$489.00</td><td class="mono">$12,343.92</td><td class="positive mono">+$280.80 <small>+2.33%</small></td><td><button class="row-menu">•••</button></td></tr></tbody></table></div>
+            <div class="table-wrap"><table><thead><tr><th>ASSET</th><th>LAST PRICE</th><th>SHARES</th><th>AVG. COST</th><th>MARKET VALUE</th><th>DAY RETURN</th><th></th></tr></thead><tbody id="positionsBody"><tr><td><span class="stock-logo nvidia">N</span><span class="asset-name"><strong>NVDA</strong><small>NVIDIA</small></span></td><td>$184.92</td><td>25</td><td>$172.44</td><td>$4,623.00</td><td class="positive">+$308.00</td><td><button class="text-button close-position" data-symbol="NVDA">✕</button></td></tr><tr><td><span class="stock-logo apple">A</span><span class="asset-name"><strong>AAPL</strong><small>Apple</small></span></td><td>$247.12</td><td>15</td><td>$234.80</td><td>$3,706.80</td><td class="positive">+$185.30</td><td><button class="text-button close-position" data-symbol="AAPL">✕</button></td></tr><tr><td><span class="stock-logo tesla">T</span><span class="asset-name"><strong>TSLA</strong><small>Tesla</small></span></td><td>$248.09</td><td>8</td><td>$251.20</td><td>$1,984.72</td><td class="negative">-$25.60</td><td><button class="text-button close-position" data-symbol="TSLA">✕</button></td></tr><tr><td><span class="stock-logo microsoft">M</span><span class="asset-name"><strong>MSFT</strong><small>Microsoft</small></span></td><td>$514.33</td><td>5</td><td>$498.10</td><td>$2,571.65</td><td class="positive">+$81.15</td><td><button class="text-button close-position" data-symbol="MSFT">✕</button></td></tr></tbody></table></div>
           </div>
           <div class="panel activity-panel">
             <div class="panel-header"><div><div class="panel-kicker">RECENT ACTIVITY</div><h2>Order feed</h2></div><button class="card-menu">•••</button></div>
-            <div class="activity-list"><div class="activity-item"><span class="activity-icon buy">↗</span><span><strong>Buy order filled</strong><small>NVDA · 10 shares at $180.40</small></span><time>09:36</time></div><div class="activity-item"><span class="activity-icon sell">↘</span><span><strong>Sell order filled</strong><small>AMD · 20 shares at $154.72</small></span><time>Yesterday</time></div><div class="activity-item"><span class="activity-icon model">✦</span><span><strong>Model retrained</strong><small>NVDA forecast confidence: 78.4%</small></span><time>Yesterday</time></div></div>
+            <div class="activity-list"><div class="activity-item"><span class="activity-icon buy">↗</span><span><strong>Buy order filled</strong><small>NVDA · 10 shares at $180.40</small></span><span class="activity-time">2m ago</span></div><div class="activity-item"><span class="activity-icon sell">↙</span><span><strong>Sell order filled</strong><small>AMD · 20 shares at $152.30</small></span><span class="activity-time">14m ago</span></div><div class="activity-item"><span class="activity-icon alert">⚠</span><span><strong>Price alert triggered</strong><small>AAPL crossed $245.00</small></span><span class="activity-time">28m ago</span></div><div class="activity-item"><span class="activity-icon buy">↗</span><span><strong>Buy order filled</strong><small>MSFT · 5 shares at $510.20</small></span><span class="activity-time">1h ago</span></div></div>
             <button class="outline-button activity-button">View all activity <span>→</span></button>
           </div>
         </section>
         <footer><span><span class="live-pulse"></span> Data delayed by 15 min</span><span>Powered by Atlas Market Data <b>·</b> Paper trading only</span></footer>
       </main>
 
+      <!-- Alerts View -->
+      <main class="main-content app-view" id="alerts" hidden>
+        <header class="topbar">
+          <div class="breadcrumb"><span>Workspace</span><b>/</b><strong>Price Alerts</strong></div>
+          <div class="topbar-actions"><div class="market-status"><span class="live-pulse"></span>US markets open <span class="status-time">09:42:18 ET</span></div><button class="theme-toggle" aria-label="Switch to dark theme">☾</button></div>
+        </header>
+        <section class="hero-row">
+          <div>
+            <h1>Price Alerts</h1>
+            <p class="hero-subtitle">Get notified when prices hit your targets</p>
+          </div>
+          <button class="primary-button" id="addAlertButton"><span>＋</span> New alert</button>
+        </section>
+        <section class="alerts-grid">
+          <div class="panel alerts-panel">
+            <div class="alert-item" data-symbol="NVDA">
+              <div class="alert-header">
+                <span class="stock-logo nvidia">N</span>
+                <div><strong>NVDA</strong> <small>$190.00 or above</small></div>
+                <button class="text-button delete-alert">×</button>
+              </div>
+              <div class="alert-info">Current: $184.92 · Notify via Email</div>
+            </div>
+            <div class="alert-item" data-symbol="AAPL">
+              <div class="alert-header">
+                <span class="stock-logo apple">A</span>
+                <div><strong>AAPL</strong> <small>$240.00 or below</small></div>
+                <button class="text-button delete-alert">×</button>
+              </div>
+              <div class="alert-info">Current: $247.12 · Notify via Popup</div>
+            </div>
+            <div class="alert-item" data-symbol="TSLA">
+              <div class="alert-header">
+                <span class="stock-logo tesla">T</span>
+                <div><strong>TSLA</strong> <small>$250.00 or above</small></div>
+                <button class="text-button delete-alert">×</button>
+              </div>
+              <div class="alert-info">Current: $248.09 · Notify via Both</div>
+            </div>
+          </div>
+        </section>
+        <footer><span><span class="live-pulse"></span> Alerts checked every 30 seconds</span></footer>
+      </main>
+
       <main class="main-content app-view model-view" id="models-page" hidden>
         <header class="topbar">
           <div class="breadcrumb"><span>Workspace</span><b>/</b><strong>Models &amp; Learn</strong></div>
-          <div class="topbar-actions"><div class="market-status"><span class="live-pulse"></span>US markets open <span class="status-time">09:42:18 ET</span></div><button class="icon-button" aria-label="Notifications">♢<i></i></button><button class="help-button">? <span>Help center</span></button><button class="theme-toggle" aria-label="Switch to dark theme" title="Switch theme">☾</button></div>
+          <div class="topbar-actions"><div class="market-status"><span class="live-pulse"></span>US markets open <span class="status-time">09:42:18 ET</span></div><button class="theme-toggle" aria-label="Switch theme">☾</button></div>
         </header>
         <section class="model-hero">
-          <div><p class="eyebrow">ATLAS LABS <span class="eyebrow-line"></span> LEARN BY BUILDING</p><h1>Make a forecast.<br><em>Understand the why.</em></h1><p class="hero-subtitle">Explore how market data becomes a signal, then train a model yourself.</p></div>
+          <div><p class="eyebrow">ATLAS LABS <span class="eyebrow-line"></span> LEARN BY BUILDING</p><h1>Make a forecast.<br><em>Understand the why.</em></h1><p class="hero-subtitle">Explore how machine learning finds trading signals in market data.</p></div>
           <div class="model-hero-mark"><span>✦</span><small>MODEL<br>LAB</small></div>
         </section>
         <section class="model-workspace">
           <div class="panel lab-panel">
             <div class="panel-header"><div><div class="panel-kicker">01 / BUILD A SIGNAL</div><h2>Linear regression lab</h2></div><span class="model-badge">GUIDED</span></div>
-            <p class="panel-intro">A simple model learns the relationship between recent market features and the next 7-day return. Adjust the inputs, then watch the fit update.</p>
-            <div class="feature-controls"><label><span>Price momentum</span><strong id="momentumValue">68</strong><input id="momentumInput" type="range" min="0" max="100" value="68" /></label><label><span>Volume trend</span><strong id="volumeValue">54</strong><input id="volumeInput" type="range" min="0" max="100" value="54" /></label><label><span>Volatility</span><strong id="volatilityValue">31</strong><input id="volatilityInput" type="range" min="0" max="100" value="31" /></label></div>
-            <div class="equation-box"><div class="equation-label">THE MODEL</div><div class="equation"><span>ŷ</span> = <b>w₁</b> · momentum + <b>w₂</b> · volume − <b>w₃</b> · volatility + <b>b</b></div><div class="equation-caption">The weights are learned from historical examples, not chosen by hand.</div></div>
-            <div class="fit-row"><div><span>Predicted 7-day return</span><strong id="labPrediction">+6.8%</strong></div><div><span>Signal strength</span><strong class="positive" id="labSignal">Bullish</strong></div><button class="primary-button" id="labTrainButton"><span>✦</span> Train on inputs</button></div>
+            <p class="panel-intro">A simple model learns the relationship between recent market features and the next 7-day return. Adjust the inputs, then watch the fit update in real time.</p>
+            <div class="feature-controls"><label><span>Price momentum</span><strong id="momentumValue">68</strong><input id="momentumInput" type="range" min="0" max="100" value="68" /></label><label><span>Volume trend</span><strong id="volumeValue">52</strong><input id="volumeInput" type="range" min="0" max="100" value="52" /></label><label><span>Volatility</span><strong id="volatilityValue">34</strong><input id="volatilityInput" type="range" min="0" max="100" value="34" /></label></div>
+            <div class="equation-box"><div class="equation-label">THE MODEL</div><div class="equation"><span>ŷ</span> = <b>w₁</b> · momentum + <b>w₂</b> · volume − <b>w₃</b> · volatility + <b>b</b></div></div>
+            <div class="fit-row"><div><span>Predicted 7-day return</span><strong id="labPrediction">+6.8%</strong></div><div><span>Signal strength</span><strong class="positive" id="labSignal">Bullish</strong></div></div>
             <div class="training-status" id="trainingStatus"><span class="status-dot"></span> Model ready <small>Last trained 2 min ago</small></div>
+            <button class="outline-button" id="labTrainButton"><span class="spark">✦</span> Train model <kbd>⌘ ↵</kbd></button>
           </div>
-          <aside class="panel lesson-panel"><div class="panel-kicker">02 / THE BIG IDEA</div><h2>What is gradient descent?</h2><div class="lesson-visual"><div class="loss-point point-one"></div><div class="loss-point point-two"></div><div class="loss-point point-three"></div><div class="descent-line"></div><span>loss</span><b>better fit →</b></div><p>Imagine rolling a ball downhill. Each training step measures the model's error, then nudges its weights in the direction that reduces that error.</p><div class="lesson-step"><span>1</span><div><strong>Predict</strong><small>Use the current weights to estimate the return.</small></div></div><div class="lesson-step"><span>2</span><div><strong>Measure error</strong><small>Compare the estimate with what actually happened.</small></div></div><div class="lesson-step"><span>3</span><div><strong>Adjust weights</strong><small>Repeat until the loss stops improving.</small></div></div></aside>
+          <aside class="panel lesson-panel"><div class="panel-kicker">02 / THE BIG IDEA</div><h2>What is gradient descent?</h2><div class="lesson-visual"><div class="loss-point point-one"></div><div class="loss-point point-two"></div><div class="loss-point point-three"></div><div class="loss-curve"></div></div><p>Gradient descent iteratively adjusts model weights to minimize prediction error. Each step moves in the direction of steepest descent on the loss surface.</p><button class="lesson-button outline-button" data-lesson="risk">See example <span>→</span></button></aside>
         </section>
         <section class="learn-grid">
-          <div class="panel learn-card"><div class="learn-number">03</div><div class="panel-kicker">MARKET BASICS</div><h2>Read a stock's story</h2><p>Price is only one piece of the picture. Combine trend, volume, and volatility to ask better questions before placing a trade.</p><button class="text-button lesson-button" data-lesson="market">Open the market basics <span>→</span></button></div>
-          <div class="panel learn-card orange-learn"><div class="learn-number">04</div><div class="panel-kicker">MODEL HYGIENE</div><h2>Signal is not certainty</h2><p>A 78% confidence score is not a promise. Test out-of-sample, watch for overfitting, and keep your risk small while you learn.</p><button class="text-button lesson-button" data-lesson="risk">Learn about model risk <span>→</span></button></div>
-          <div class="panel learn-card blue-learn"><div class="learn-number">05</div><div class="panel-kicker">NEXT STEP</div><h2>Build your own hypothesis</h2><p>Choose a ticker, define a target, and write down what you expect before the market gives you an answer.</p><button class="text-button lesson-button" data-lesson="hypothesis">Start an experiment <span>→</span></button></div>
+          <div class="panel learn-card"><div class="learn-number">03</div><div class="panel-kicker">MARKET BASICS</div><h2>Read a stock's story</h2><p>Price is only one piece of the picture. Combine price action with volume and volatility for a fuller signal.</p><button class="lesson-button text-button" data-lesson="market">Learn more →</button></div>
+          <div class="panel learn-card orange-learn"><div class="learn-number">04</div><div class="panel-kicker">MODEL HYGIENE</div><h2>Avoid overfitting</h2><p>A 78% confidence score on training data means nothing if the model fails on unseen data. Always validate separately.</p><button class="lesson-button text-button" data-lesson="risk">Learn more →</button></div>
+          <div class="panel learn-card blue-learn"><div class="learn-number">05</div><div class="panel-kicker">NEXT STEP</div><h2>Build your own hypothesis</h2><p>Choose a ticker, define a target window, and paper trade your model. Review the results and iterate.</p><button class="lesson-button text-button" data-lesson="hypothesis">Learn more →</button></div>
         </section>
         <div class="lesson-banner" id="lessonBanner" hidden><strong>Try this:</strong> <span id="lessonText"></span><button id="closeLesson" aria-label="Close lesson">×</button></div>
         <footer><span><span class="live-pulse"></span> Data delayed by 15 min</span><span>Atlas Labs <b>·</b> Educational mode, not financial advice</span></footer>
       </main>
     </div>
 
+    <!-- Trade Modal -->
     <div class="modal-backdrop" id="tradeModal" hidden>
-      <div class="trade-modal" role="dialog" aria-modal="true" aria-labelledby="tradeTitle"><button class="modal-close" id="closeModal" aria-label="Close">×</button><div class="panel-kicker">PAPER ACCOUNT</div><h2 id="tradeTitle">Place a paper trade</h2><p class="modal-copy">Test your idea with simulated buying power. No real orders will be sent.</p><div class="trade-tabs"><button class="trade-tab active" data-side="buy">Buy</button><button class="trade-tab" data-side="sell">Sell</button></div><label>Symbol<input id="tradeSymbol" value="NVDA" maxlength="5" /></label><label>Shares<input id="tradeShares" type="number" value="10" min="1" /></label><div class="estimated-row"><span>Estimated value</span><strong id="estimatedValue">$1,849.20</strong></div><button class="primary-button full-width" id="submitTrade">Review paper order <span>→</span></button><p class="modal-feedback" id="tradeFeedback"></p></div>
+      <div class="trade-modal" role="dialog" aria-modal="true" aria-labelledby="tradeTitle"><button class="modal-close" id="closeModal" aria-label="Close">×</button><div class="panel-kicker">PAPER TRADING</div><h2 id="tradeTitle">New paper trade</h2><div class="trade-tabs"><button class="trade-tab active" data-side="buy">Buy</button><button class="trade-tab" data-side="sell">Sell</button></div><div class="trade-form"><div class="form-group"><label for="tradeSymbol">Symbol</label><input type="text" id="tradeSymbol" placeholder="NVDA" maxlength="5" /></div><div class="form-group"><label for="tradeShares">Shares</label><input type="number" id="tradeShares" placeholder="10" min="1" value="10" /></div><div class="form-summary"><span>Est. value</span><strong id="estimatedValue">$1,849.20</strong></div><div class="trade-feedback" id="tradeFeedback"></div></div><div class="modal-actions"><button class="secondary-button" id="closeModal2">Cancel</button><button class="primary-button" id="submitTrade">Submit order</button></div></div>
     </div>
+
+    <!-- Alert Modal -->
+    <div class="modal-backdrop" id="alertModal" hidden>
+      <div class="trade-modal" role="dialog" aria-modal="true" aria-labelledby="alertTitle"><button class="modal-close" id="closeAlertModal" aria-label="Close">×</button><div class="panel-kicker">NEW ALERT</div><h2 id="alertTitle">Set a price alert</h2><div class="alert-form"><div class="form-group"><label for="alertSymbol">Symbol</label><input type="text" id="alertSymbol" placeholder="NVDA" maxlength="5" /></div><div class="form-group"><label for="alertPrice">Price target</label><input type="number" id="alertPrice" placeholder="190.00" step="0.01" /></div><div class="form-group"><label for="alertType">Alert when</label><select id="alertType"><option value="above">Price goes above</option><option value="below">Price goes below</option><option value="change">Price changes by %</option></select></div><div class="form-group"><label for="alertNotify">Notify via</label><select id="alertNotify"><option value="email">Email</option><option value="popup">Popup</option><option value="both">Email & Popup</option></select></div></div><div class="modal-actions"><button class="secondary-button" id="cancelAlertModal">Cancel</button><button class="primary-button" id="submitAlert">Create alert</button></div></div>
+    </div>
+
     <script type="module" src="/app.js"></script>
   </body>
 </html>
